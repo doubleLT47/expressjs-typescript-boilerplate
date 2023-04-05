@@ -8,8 +8,10 @@ export const env = getEnv(process.env);
 
 import "./config/db";
 import APIRoute from "./routes/index";
+// import syncEmployeeData from "./utils/sync-employee-data";
 
 const startServer = async () => {
+  // syncEmployeeData();
   const app: Express = express();
   app.use(cors());
   app.use(express.json());
