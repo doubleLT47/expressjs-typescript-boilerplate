@@ -2,11 +2,11 @@ import "dotenv/config";
 import express, { Express } from "express";
 import "express-async-errors";
 import cors from "cors";
-import { getEnv } from "./config/env";
-import db from "./config/db";
-import APIRoute from "./api/index";
 
+import { getEnv } from "./config/env";
 export const env = getEnv(process.env);
+
+import APIRoute from "./routes/index";
 
 const startServer = async () => {
   const app: Express = express();
@@ -17,8 +17,6 @@ const startServer = async () => {
       extended: false,
     })
   );
-
-  await db.connect();
 
   app.use("/api", APIRoute);
 

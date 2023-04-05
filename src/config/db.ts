@@ -1,19 +1,14 @@
-import mongoose from "mongoose";
-import { env } from "../index";
+import Knex from 'knex'
+import { env } from '../index'
+const knex = Knex({
+	client: 'mssql',
+	connection: {
+		host: env.DB_HOST || '',
+		port: Number(env.DB_PORT) || 1433,
+		user: env.DB_USER || '',
+		password: env.DB_PWD || '',
+		database: env.DB_NAME || '',
+	},
+})
 
-const connect = async () => {
-  try {
-    const url = `mongodb://${env.MONGODB_USER}:${env.MONGODB_PWD}@${env.MONGODB_HOST}:${env.MONGODB_PORT}/?authSource=admin`;
-
-    await mongoose.connect(url);
-    console.info(`---------------------------------`);
-    console.info(`🚀 Connect to mongodb success`);
-    console.info(`---------------------------------`);
-  } catch (e) {
-    console.info(`---------------------------------`);
-    console.info(`Connect to mongodb failure`);
-    console.info(`---------------------------------`);
-  }
-};
-
-export default { connect };
+export default knex

@@ -7,9 +7,3 @@ export interface IRequest {
   file?: any;
 }
 
-export interface IValidateRequest {
-  request: IRequest;
-  header: any;
-  body: any;
-  query: any;
-}
