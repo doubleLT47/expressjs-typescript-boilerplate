@@ -6,6 +6,7 @@ import cors from "cors";
 import { getEnv } from "./config/env";
 export const env = getEnv(process.env);
 
+import "./config/db";
 import APIRoute from "./routes/index";
 
 const startServer = async () => {
