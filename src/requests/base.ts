@@ -1,4 +1,4 @@
-import { IRequest } from "./../interfaces/requests/request";
+import { IRequest } from "@interfaces/requests/request";
 
 export default class RBase {
   protected request: IRequest;

@@ -1,4 +1,4 @@
-import { IResponse } from "../interfaces/response";
+import { IResponse } from "@interfaces/response";
 import { NextFunction, Request, Response } from "express";
 
 export default async (result: any, req: Request, res: Response, next: NextFunction) => {

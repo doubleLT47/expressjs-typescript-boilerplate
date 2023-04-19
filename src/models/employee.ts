@@ -1,6 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { IEmployee } from "../interfaces/models/employee";
-import { MDepartment } from "./department";
+import { IEmployee } from "@interfaces/models/employee";
 
 export class MEmployee extends Model<IEmployee> implements IEmployee {
   public id: number;
@@ -134,12 +133,4 @@ export default (sequelize: Sequelize): typeof MEmployee => {
     }
   );
   return MEmployee;
-};
-
-export const employeeAssociated = () => {
-  MEmployee.hasOne(MDepartment, {
-    as: "department",
-    foreignKey: "id",
-    sourceKey: "department_id",
-  });
 };
