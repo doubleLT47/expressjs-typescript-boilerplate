@@ -26,4 +26,7 @@ export default class RBase {
   public files(): any {
     throw new Error("Method not implemented.");
   }
+  public file(): any {
+    throw new Error("Method not implemented.");
+  }
 }

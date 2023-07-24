@@ -1,5 +1,5 @@
 export interface IResponse {
-  errorCode: number | null;
+  code: number | null;
   message: string;
   data: any;
 }

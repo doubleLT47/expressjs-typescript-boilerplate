@@ -1,8 +1,6 @@
 import Sequelize from "sequelize";
-import employee, { employeeAssociated } from "./employee";
+import user from "./user";
 
 export default (sequelize: Sequelize.Sequelize): void => {
-  employee(sequelize);
-
-  employeeAssociated();
+  user(sequelize);
 };

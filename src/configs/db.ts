@@ -19,22 +19,23 @@ const sequelize: Sequelize.Sequelize = new Sequelize.Sequelize({
   },
 });
 
-sequelize.authenticate().then(() => {
+export const initializeDatabase = async (sync: boolean = false) => {
+  await sequelize.authenticate();
+
   console.info(`---------------------------------`);
   console.info(`🚀 Connect to database success`);
   console.info(`---------------------------------`);
-});
+  Modals(sequelize);
 
-// sequelize
-//   .sync({
-//     force: false,
-//     alter: true,
-//   })
-//   .then(function () {
-//     console.log("=-=- Sync DB Success -=-=");
-//   });
+  if (sync) {
+    await sequelize.sync({
+      force: false,
+      alter: true,
+    });
 
-Modals(sequelize);
+    console.log("=-=- Sync DB Success -=-=");
+  }
+};
 
 export default {
   sequelize,

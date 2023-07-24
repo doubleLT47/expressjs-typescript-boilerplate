@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { IEmployee } from "@interfaces/models/employee";
-import { MEmployee } from "@models/employee";
+import { IUser } from "@interfaces/models/user";
+import { MUser } from "@models/user";
 import Joi from "joi";
 
 declare global {
   namespace Express {
     interface Request {
-      employee: IEmployee;
+      employee: IUser;
     }
   }
 }
@@ -24,7 +24,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   }
   const zaloId: string = validationZaloId.value;
 
-  const user: MEmployee | null = await MEmployee.findOne({
+  const user: IUser | null = await MUser.findOne({
     where: { zalo_uid: zaloId },
     attributes: {
       exclude: [
@@ -43,6 +43,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         "password",
       ],
     },
+    raw:  true,
+    nest:  true
   });
 
   if (!user) {
@@ -52,7 +54,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     };
   }
 
-  req.employee = user.dataValues;
+  req.employee = user;
 
   next();
 };

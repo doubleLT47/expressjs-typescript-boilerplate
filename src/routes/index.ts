@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import responseHandle from "@middleware/response-handle";
+import UserRoute from "@routes/user";
 const route: Router = express.Router();
 
-route.use(responseHandle);
+route.use("/user", UserRoute);
 
 export default route;

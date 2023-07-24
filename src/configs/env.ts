@@ -1,7 +1,8 @@
+import { IEnv } from "@interfaces/env";
 import Joi from "joi";
 
-export const getEnv = (object: any) => {
-  const schema: Joi.ObjectSchema = Joi.object({
+export const getEnv = (object: any): IEnv => {
+  const schema: Joi.ObjectSchema<IEnv> = Joi.object({
     DB_HOST: Joi.string().required(),
     DB_PORT: Joi.number().required(),
     DB_USER: Joi.string().required(),
@@ -10,7 +11,7 @@ export const getEnv = (object: any) => {
     PORT: Joi.number().required(),
   });
 
-  const env: Joi.ValidationResult = schema.validate(object, {
+  const env: Joi.ValidationResult<IEnv> = schema.validate(object, {
     allowUnknown: true,
   });
   if (env.error) throw env.error.message;

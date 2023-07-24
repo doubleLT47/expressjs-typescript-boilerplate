@@ -25,7 +25,7 @@
       "@services/*": ["services/*"],
       "@configs/*": ["configs/*"],
       "@utils/*": ["utils/*"],
-      "@requests/*": ["requests/*"],
+      "@validations/*": ["validations/*"],
       "@constants/*": ["constants/*"],
       "@websocket/*": ["websocket/*"]
     }

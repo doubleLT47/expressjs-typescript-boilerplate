@@ -1,18 +1,32 @@
 import { IResponse } from "@interfaces/response";
 import { NextFunction, Request, Response } from "express";
 
-export default async (result: any, req: Request, res: Response, next: NextFunction) => {
-  const status: number =
-    result.statusCode === 401 || result.statusCode === 403
-      ? result.statusCode
-      : !result.statusCode && result.errorCode === null
-      ? 500
-      : 200;
-  result.errorCode !== 0 && console.log(result);
+export default async (
+  result: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let status: number = 200;
+
+  if (result.code === -10) {
+    status = 401;
+  }
+
+  if (result.code === -11) {
+    status = 403;
+  }
+
+  if (result.code !== 0 ?? !result.code) {
+    status = 500;
+    console.log(result);
+  }
+
   const response: IResponse = {
-    errorCode: result.errorCode !== undefined ? result.errorCode : null,
-    message: result.message || "Something went wrong",
-    data: result.data || null,
+    code: status === 200 ? result.code : null,
+    message: status === 500 ? "Something went wrong" : result.message,
+    data: result.data || null
   };
-  res.status(status).json(response);
+
+  return res.status(status).json(response);
 };

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { IEmployee } from "@interfaces/models/employee";
+import { IUser } from "@interfaces/models/user";
 
-export class MEmployee extends Model<IEmployee> implements IEmployee {
+export class MUser extends Model<IUser> implements IUser {
   public id: number;
   public last_name: string;
   public first_name: string;
@@ -29,8 +29,8 @@ export class MEmployee extends Model<IEmployee> implements IEmployee {
   public readonly updatedAt: Date;
 }
 
-export default (sequelize: Sequelize): typeof MEmployee => {
-  MEmployee.init(
+export default (sequelize: Sequelize): typeof MUser => {
+  MUser.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -128,9 +128,8 @@ export default (sequelize: Sequelize): typeof MEmployee => {
     {
       sequelize,
       paranoid: true,
-      schema: "hr",
-      tableName: "n_employees",
+      tableName: "employees",
     }
   );
-  return MEmployee;
+  return MUser;
 };
