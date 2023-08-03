@@ -1,15 +1,18 @@
+import configs from "@configs/index";
 import * as Sequelize from "sequelize";
-import { env } from "../index";
 import Modals from "@models/index";
 
+const {
+  postgres: { host, port, name, username, password },
+} = configs;
+
 const sequelize: Sequelize.Sequelize = new Sequelize.Sequelize({
-  host: env.DB_HOST,
-  port: env.DB_PORT,
-  database: env.DB_NAME,
-  username: env.DB_USER,
-  password: env.DB_PWD,
-  dialect: "mssql",
-  timezone: "+07:00",
+  host: host,
+  port: Number(port),
+  database: name,
+  username: username,
+  password: password,
+  dialect: "postgres",
   logging: false,
   define: {
     charset: "utf8mb4",

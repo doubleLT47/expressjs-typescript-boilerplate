@@ -43,8 +43,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         "password",
       ],
     },
-    raw:  true,
-    nest:  true
+    raw: true,
+    nest: true,
   });
 
   if (!user) {

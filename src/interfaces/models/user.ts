@@ -1,25 +1,28 @@
+import { IPost } from "./post";
+import { IRole } from "./role";
+
 export interface IUser {
-  id: number;
-  last_name: string;
-  first_name: string;
-  id_on_sapogo?: string;
-  id_on_chatbot?: string;
-  id_on_manychat?: string;
-  phone_number?: string;
-  password?: string;
-  dob?: string;
-  email?: string;
-  address?: string;
-  status: number;
-  sapogo_active?: number;
-  basic_salary?: number;
-  basic_number_working_days?: number;
-  other_agreement?: string;
-  bonus_overtime_percent?: number;
-  bonus_holiday_percent?: number;
-  reset_password_token?: string;
-  role?: string;
-  department_id?: number;
-  zalo_uid?: string;
-  active_at: Date;
+  id?: number;
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  phone: string;
+  email: string;
+  password: string;
+  roleId: number | null;
+  enable: boolean;
+  profile: {
+    avatar: string | null;
+    dob: Date | null;
+    address: string | null;
+    email: {
+      code: string | null;
+      active: false;
+      activeAt: Date | null;
+    };
+  };
+  createdAt?: Date;
+  updatedAt?: Date;
+  role?: IRole;
+  posts?: IPost[];
 }

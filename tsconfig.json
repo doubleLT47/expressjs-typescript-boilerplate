@@ -27,7 +27,7 @@
       "@utils/*": ["utils/*"],
       "@validations/*": ["validations/*"],
       "@constants/*": ["constants/*"],
-      "@websocket/*": ["websocket/*"]
+      "@helpers/*": ["helpers/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],

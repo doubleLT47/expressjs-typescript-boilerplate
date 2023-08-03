@@ -2,19 +2,67 @@ import "dotenv/config";
 import express, { Express } from "express";
 import "express-async-errors";
 import cors from "cors";
-import { IEnv } from "@interfaces/env";
+import morgan from "morgan";
+import helmet from "helmet";
+import compression from "compression";
 
-import { getEnv } from "@configs/env";
-export const env: IEnv = getEnv(process.env);
+import "@configs/env";
 
 import APIRoute from "./routes/index";
-import { initializeDatabase } from "@configs/db";
+import { initializeDatabase } from "@configs/postgres";
 import responseHandle from "@middleware/response-handle";
+import configs from "./configs";
+import { checkOverload } from "@helpers/check-connect";
 
 const startServer = async () => {
-  await initializeDatabase(false);
-
   const app: Express = express();
+
+  app.use(morgan("dev"));
+
+  // setting base
+  app.use(
+    helmet.frameguard({
+      action: "deny",
+    })
+  );
+  // strict transport security
+  const reqDuration = 2629746000;
+  app.use(
+    helmet.hsts({
+      maxAge: reqDuration,
+    })
+  );
+
+  // content security policy
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+      },
+    })
+  );
+  // x content type options
+  app.use(helmet.noSniff());
+  // x xss protection
+  app.use(helmet.xssFilter());
+  // referrer policy
+  app.use(
+    helmet.referrerPolicy({
+      policy: "no-referrer",
+    })
+  );
+
+  app.use(
+    compression({
+      level: 6, // level compress
+      threshold: 100 * 1024, // > 100kb threshold to compress
+      filter: (req) => {
+        return !req.headers["x-no-compress"];
+      },
+    })
+  );
+
   app.use(cors());
   app.use(express.json());
   app.use(
@@ -23,10 +71,23 @@ const startServer = async () => {
     })
   );
 
+  if (configs.mongo.enable) {
+    require("@configs/mongo");
+    checkOverload();
+  }
+
+  if (configs.postgres.enable) {
+    await initializeDatabase(false);
+  }
+
+  if (configs.s3.enable) {
+    require("@services/s3");
+  }
+
   app.use("/api", APIRoute);
   app.use(responseHandle);
 
-  const port = process.env.PORT || 3000;
+  const port = configs.app.port || 3000;
   app.listen(port);
   console.log("Server is running at http://localhost:" + port);
 };

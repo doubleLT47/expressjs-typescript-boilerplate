@@ -1,30 +1,24 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IUser } from "@interfaces/models/user";
+import { MRole } from "./role";
+import { MPost } from "./post";
 
 export class MUser extends Model<IUser> implements IUser {
   public id: number;
-  public last_name: string;
-  public first_name: string;
-  public id_on_sapogo?: string;
-  public id_on_chatbot?: string;
-  public id_on_manychat?: string;
-  public phone_number?: string;
-  public password?: string;
-  public dob?: string;
-  public email?: string;
-  public address?: string;
-  public status: number;
-  public sapogo_active?: number;
-  public basic_salary?: number;
-  public basic_number_working_days?: number;
-  public other_agreement?: string;
-  public bonus_overtime_percent?: number;
-  public bonus_holiday_percent?: number;
-  public reset_password_token?: string;
-  public role?: string;
-  public department_id?: number;
-  public zalo_uid?: string;
-  public active_at: Date;
+  public lastName: string;
+  public firstName: string;
+  public middleName: string;
+  public phone: string;
+  public password: string;
+  public email: string;
+  public enable: boolean;
+  public roleId: number | null;
+  public profile: {
+    avatar: string | null;
+    dob: Date | null;
+    address: string | null;
+    email: { code: string | null; active: false; activeAt: Date | null };
+  };
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 }
@@ -37,99 +31,61 @@ export default (sequelize: Sequelize): typeof MUser => {
         primaryKey: true,
         autoIncrement: true,
       },
-      last_name: {
-        type: DataTypes.TEXT,
+      lastName: {
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
-      first_name: {
-        type: DataTypes.TEXT,
+      firstName: {
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
-      id_on_sapogo: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      middleName: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
-      id_on_chatbot: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      id_on_manychat: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      phone_number: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      phone: {
+        type: DataTypes.STRING(11),
+        allowNull: false,
       },
       password: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      dob: {
-        type: DataTypes.DATEONLY,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
       email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      enable: {
+        type: DataTypes.BOOLEAN(),
+        defaultValue: true,
+      },
+      roleId: {
+        type: DataTypes.UUID,
         allowNull: true,
       },
-      address: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      status: {
-        type: DataTypes.TINYINT,
-        allowNull: true,
-      },
-      sapogo_active: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      basic_salary: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      basic_number_working_days: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      other_agreement: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      bonus_overtime_percent: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      bonus_holiday_percent: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      reset_password_token: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      role: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      department_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      zalo_uid: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      active_at: {
-        type: DataTypes.DATEONLY,
+      profile: {
+        type: DataTypes.JSONB,
+        defaultValue: {},
       },
     },
     {
       sequelize,
       paranoid: true,
-      tableName: "employees",
+      tableName: "user",
     }
   );
   return MUser;
+};
+
+export const UserAssociated = () => {
+  MUser.hasOne(MRole, {
+    as: "role",
+    foreignKey: "id",
+    sourceKey: "roleId",
+  });
+  MUser.hasMany(MPost, {
+    as: "posts",
+    foreignKey: "userId",
+    sourceKey: "id",
+  });
 };
