@@ -28,7 +28,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY_TGW }}/${{ secrets.DOCKER_USERNAME_TGW }}/crawl-data:v1.0.0
+          tags: ${{ secrets.DOCKER_REGISTRY_TGW }}/${{ secrets.DOCKER_USERNAME_TGW }}/core-api:v1.0.0
           file: ./Dockerfile
 
       - name: slack notifications
