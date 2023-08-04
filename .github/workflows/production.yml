@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - "main"
+name: Build image and push image to registry.
+jobs:
+  build:
+    name: build and push image
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: set up docker buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: login to docker hub
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY_TGW }}
+          username: ${{ secrets.DOCKER_USERNAME_TGW }}
+          password: ${{ secrets.DOCKER_PASSWORD_TGW }}
+
+      - name: build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY_TGW }}/${{ secrets.DOCKER_USERNAME_TGW }}/core-api:v1.0.0
+          file: ./Dockerfile
+
+      - name: slack notifications
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          chanel: "#core-app-notification"
+        if: always()

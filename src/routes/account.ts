@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import UserController from "@controllers/user";
+import AccountController from "@controllers/web/account";
 const router: Router = express.Router();
 
-router.get("/", UserController.List);
+router.get("/profile", AccountController.profile);
 
 export default router;

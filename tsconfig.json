@@ -21,6 +21,7 @@
       "@interfaces/*": ["interfaces/*"],
       "@middleware/*": ["middleware/*"],
       "@models/*": ["models/*"],
+      "@dbs/*": ["dbs/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
       "@configs/*": ["configs/*"],

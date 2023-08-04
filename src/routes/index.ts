@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import UserRoute from "@routes/user";
+import AccountRoute from "@routes/account";
 const route: Router = express.Router();
 
-route.use("/user", UserRoute);
+route.use("/me", AccountRoute);
 
 export default route;

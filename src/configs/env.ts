@@ -3,12 +3,12 @@ import Joi from "joi";
 
 export default (object: any) => {
   const schema: Joi.ObjectSchema<IEnv> = Joi.object({
-    MONGO_ENABLE: Joi.boolean(),
-    MONGO_HOST: Joi.string().required(),
-    MONGO_PORT: Joi.number().required(),
-    MONGO_DATABASE: Joi.string().required(),
-    MONGO_USERNAME: Joi.string().required(),
-    MONGO_PASSWORD: Joi.string().required(),
+    // MONGO_ENABLE: Joi.boolean(),
+    // MONGO_HOST: Joi.string().required(),
+    // MONGO_PORT: Joi.number().required(),
+    // MONGO_DATABASE: Joi.string().required(),
+    // MONGO_USERNAME: Joi.string().required(),
+    // MONGO_PASSWORD: Joi.string().required(),
     POSTGRES_ENABLE: Joi.boolean(),
     POSTGRES_HOST: Joi.string().required(),
     POSTGRES_PORT: Joi.number().required(),
@@ -22,6 +22,9 @@ export default (object: any) => {
     ENDPOINT: Joi.string().required(),
     AWS_ACCESS_KEY: Joi.string().required(),
     AWS_SECRET_KEY: Joi.string().required(),
+    SLACK_SIGNING_SECRET: Joi.string().required(),
+    SLACK_BOT_TOKEN: Joi.string().required(),
+    SLACK_CHANNEL: Joi.string().required(),
   });
 
   const env: Joi.ValidationResult<IEnv> = schema.validate(object, {

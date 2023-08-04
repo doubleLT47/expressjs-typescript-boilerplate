@@ -9,9 +9,9 @@ import compression from "compression";
 import "@configs/env";
 
 import APIRoute from "./routes/index";
-import { initializeDatabase } from "@configs/postgres";
+import { initializeDatabase } from "@dbs/postgres";
 import responseHandle from "@middleware/response-handle";
-import configs from "./configs";
+import configs from "@configs/index";
 import { checkOverload } from "@helpers/check-connect";
 
 const startServer = async () => {
@@ -72,7 +72,7 @@ const startServer = async () => {
   );
 
   if (configs.mongo.enable) {
-    require("@configs/mongo");
+    require("@dbs/mongo");
     checkOverload();
   }
 

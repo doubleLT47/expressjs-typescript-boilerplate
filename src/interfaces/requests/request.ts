@@ -6,4 +6,3 @@ export interface IRequest {
   files?: any;
   file?: any;
 }
-
