@@ -27,10 +27,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       }
       res.locals.user = user;
     } catch (error) {
-      return next({
-        code: 10,
-        message: "something went wrong!",
-      });
+      return next(error);
     }
     next();
   } catch (error: any) {

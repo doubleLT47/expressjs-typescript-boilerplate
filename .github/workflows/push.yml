@@ -1,7 +1,7 @@
 on:
-  pull_request:
+  push:
     branches: [develop]
-name: Build image and push image to registry.
+name: Build and push development docker image
 jobs:
   build:
     name: build and push image
