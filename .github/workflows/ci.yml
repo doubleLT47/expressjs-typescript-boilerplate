@@ -1,7 +1,6 @@
 on:
-  push:
-    branches:
-      - "main"
+  pull_request:
+    branches: [develop]
 name: Build image and push image to registry.
 jobs:
   build:

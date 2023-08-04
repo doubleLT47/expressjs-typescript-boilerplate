@@ -1,60 +1,53 @@
 import { Request, Response, NextFunction } from "express";
 import { IUser } from "@interfaces/models/user";
 import { MUser } from "@models/user";
-import Joi from "joi";
-
-declare global {
-  namespace Express {
-    interface Request {
-      employee: IUser;
-    }
-  }
-}
+import jwt from "jsonwebtoken";
+import configs from "@configs/index";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const validationZaloId: Joi.ValidationResult<string> = Joi.string()
-    .required()
-    .validate(req.headers.zalo_id);
-
-  if (validationZaloId.error) {
-    throw {
-      statusCode: 401,
-      message: "no zalo_id",
-    };
+  try {
+    const token: any = req.headers.token;
+    if (!token) {
+      return next({
+        code: -10,
+        message: "missing token",
+      });
+    }
+    const verifyPayload: jwt.JwtPayload = await verifyToken(token);
+    try {
+      const user: IUser | null = await MUser.findOne({
+        where: {
+          id: verifyPayload.id,
+        },
+        raw: true,
+        nest: true,
+      });
+      if (!user) {
+        throw Error("user not found");
+      }
+      res.locals.user = user;
+    } catch (error) {
+      return next({
+        code: 10,
+        message: "something went wrong!",
+      });
+    }
+    next();
+  } catch (error: any) {
+    next({
+      code: -10,
+      message: error.message,
+    });
   }
-  const zaloId: string = validationZaloId.value;
+};
 
-  const user: IUser | null = await MUser.findOne({
-    where: { zalo_uid: zaloId },
-    attributes: {
-      exclude: [
-        "deletedAt",
-        "createdAt",
-        "updatedAt",
-        "status",
-        "sapogo_active",
-        "basic_salary",
-        "basic_number_working_days",
-        "other_agreement",
-        "bonus_overtime_percent",
-        "bonus_holiday_percent",
-        "reset_password_token",
-        "active_at",
-        "password",
-      ],
-    },
-    raw: true,
-    nest: true,
+const verifyToken = async (token: string): Promise<jwt.JwtPayload> => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, configs.app.secret, (error, data) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(data as jwt.JwtPayload);
+    });
   });
-
-  if (!user) {
-    throw {
-      statusCode: 401,
-      message: "Unauthenticated",
-    };
-  }
-
-  req.employee = user;
-
-  next();
 };

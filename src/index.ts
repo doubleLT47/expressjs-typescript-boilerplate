@@ -1,14 +1,13 @@
 import "dotenv/config";
-import express, { Express } from "express";
 import "express-async-errors";
+import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
 
 import "@configs/env";
-
-import APIRoute from "./routes/index";
+import APIRoute from "@routes/index";
 import { initializeDatabase } from "@dbs/postgres";
 import responseHandle from "@middleware/response-handle";
 import configs from "@configs/index";
@@ -81,7 +80,11 @@ const startServer = async () => {
   }
 
   if (configs.s3.enable) {
-    require("@services/s3");
+    require("@configs/s3");
+  }
+
+  if (configs.app.env === "production") {
+    require("@cron");
   }
 
   app.use("/api", APIRoute);

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import os from "os";
 import process from "process";
-const SECONDS = 5000;
+const SECONDS = 3600000;
 
 // count connect
 export const countConnect = () => {

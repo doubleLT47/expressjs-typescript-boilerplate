@@ -15,8 +15,8 @@ class SlackLogging {
 
   public async send(message: string, blocks: any) {
     return await this.app.client.chat.postMessage({
-      token: String(token),
-      channel: String(channel),
+      token: token,
+      channel: channel,
       text: message,
       blocks,
     });

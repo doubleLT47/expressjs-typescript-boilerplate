@@ -17,18 +17,19 @@
     "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
+      "@constants/*": ["constants/*"],
+      "@configs/*": ["configs/*"],
       "@controllers/*": ["controllers/*"],
+      "@cron/*": ["cron/*"],
+      "@dbs/*": ["dbs/*"],
+      "@helpers/*": ["helpers/*"],
       "@interfaces/*": ["interfaces/*"],
       "@middleware/*": ["middleware/*"],
       "@models/*": ["models/*"],
-      "@dbs/*": ["dbs/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@configs/*": ["configs/*"],
       "@utils/*": ["utils/*"],
-      "@validations/*": ["validations/*"],
-      "@constants/*": ["constants/*"],
-      "@helpers/*": ["helpers/*"]
+      "@validations/*": ["validations/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],

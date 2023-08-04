@@ -1,4 +1,18 @@
-import AWS from "aws-sdk";
+import {
+  S3Client,
+  ListBucketsCommand,
+  CreateBucketCommand,
+  DeleteBucketCommand,
+  DeleteBucketCommandOutput,
+  ListObjectsCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  DeleteObjectOutput,
+  ListBucketsOutput,
+  CreateBucketOutput,
+  ListObjectsOutput,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import configs from "@configs/index";
 import path from "path";
 import mimeType from "mime-types";
@@ -8,11 +22,10 @@ const BUCKET: string = configs.s3.bucket as string;
 
 class Storage {
   static instance: Storage;
-  private s3: AWS.S3;
+  private s3: S3Client;
 
   constructor() {
-    this.s3 = new AWS.S3({
-      endpoint: new AWS.Endpoint(String(endpoint)),
+    this.s3 = new S3Client({
       credentials: {
         accessKeyId: String(aws_access_key),
         secretAccessKey: String(aws_secret_key),
@@ -21,59 +34,31 @@ class Storage {
     });
   }
 
-  public async listBuckets(): Promise<AWS.S3.ListBucketsOutput> {
-    return await new Promise((resolve, reject) => {
-      this.s3.listBuckets((err: AWS.AWSError, data: AWS.S3.ListBucketsOutput) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(data);
-      });
-    });
+  public listBuckets(): Promise<ListBucketsOutput> {
+    return this.s3.send(new ListBucketsCommand({}));
   }
-  public async createBucket(bucketName: string): Promise<AWS.S3.CreateBucketOutput> {
-    const bucketParams: AWS.S3.Types.CreateBucketRequest = {
-      Bucket: bucketName,
-    };
-
-    return await new Promise((resolve, reject) => {
-      this.s3.createBucket(bucketParams, (err: AWS.AWSError, data: AWS.S3.CreateBucketOutput) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(data);
-      });
-    });
+  public createBucket(bucketName: string): Promise<CreateBucketOutput> {
+    return this.s3.send(
+      new CreateBucketCommand({
+        Bucket: bucketName,
+      })
+    );
   }
 
-  public async deleteBucket(bucketName: string): Promise<any> {
-    const bucketParams: AWS.S3.Types.DeleteBucketRequest = {
-      Bucket: bucketName,
-    };
-
-    return await new Promise((resolve, reject) => {
-      this.s3.deleteBucket(bucketParams, (err: AWS.AWSError, data: {}) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(data);
-      });
-    });
+  public deleteBucket(bucketName: string): Promise<DeleteBucketCommandOutput> {
+    return this.s3.send(
+      new DeleteBucketCommand({
+        Bucket: bucketName,
+      })
+    );
   }
 
-  public async listObjects(bucketName: string = BUCKET): Promise<any> {
-    const bucketParams: AWS.S3.Types.ListObjectsRequest = {
-      Bucket: bucketName,
-    };
-
-    return await new Promise((resolve, reject) => {
-      this.s3.listObjects(bucketParams, (err: AWS.AWSError, data: AWS.S3.ListObjectsOutput) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(data);
-      });
-    });
+  public listObjects(bucketName: string = BUCKET): Promise<ListObjectsOutput> {
+    return this.s3.send(
+      new ListObjectsCommand({
+        Bucket: bucketName,
+      })
+    );
   }
 
   private async uniqueFileName(
@@ -83,12 +68,12 @@ class Storage {
   ): Promise<string> {
     const fileName: string = `${randomstring.generate(8)}.${mimeType.extension(mimetype)}`;
     try {
-      await this.s3
-        .headObject({
+      await this.s3.send(
+        new HeadObjectCommand({
           Bucket: bucket,
           Key: path.join(folder, fileName).replace(/\\/g, "/"),
         })
-        .promise();
+      );
     } catch (e: any) {
       if (e.name === "NotFound") {
         return fileName;
@@ -107,45 +92,28 @@ class Storage {
     ContentType?: string
   ): Promise<string> {
     const fileName: string = await this.uniqueFileName(file.mimetype, bucket, folder);
-    await new Promise(async (resolve, reject) => {
-      this.s3.putObject(
-        {
-          ContentType,
-          Bucket: bucket,
-          Key: fileName,
-          Body: file.buffer,
-        },
-        (err: AWS.AWSError, data: AWS.S3.PutObjectOutput) => {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(data);
-        }
-      );
-    });
-
+    await this.s3.send(
+      new PutObjectCommand({
+        ContentType,
+        Bucket: bucket,
+        Key: fileName,
+        Body: file.buffer,
+      })
+    );
     return fileName;
   }
-  public async deleteObject(
+  public deleteObject(
     fileName: string,
     bucket: string = BUCKET,
     folder: string = "/"
-  ): Promise<AWS.S3.DeleteObjectOutput> {
+  ): Promise<DeleteObjectOutput> {
     const key: string = path.join(folder, fileName).replace(/\\/g, "/");
-    return await new Promise(async (resolve, reject) => {
-      this.s3.deleteObject(
-        {
-          Bucket: bucket,
-          Key: key,
-        },
-        (err: AWS.AWSError, data: AWS.S3.DeleteObjectOutput) => {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(data);
-        }
-      );
-    });
+    return this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: bucket,
+        Key: key,
+      })
+    );
   }
 
   static getInstance(): Storage {
