@@ -30,6 +30,4 @@ class SlackLogging {
   }
 }
 
-const slackInstance = SlackLogging.getInstance();
-
-export default slackInstance;
+export default SlackLogging.getInstance();

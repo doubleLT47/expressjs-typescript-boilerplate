@@ -124,6 +124,4 @@ class Storage {
   }
 }
 
-const s3Storage = Storage.getInstance();
-
-export default s3Storage;
+export default Storage.getInstance();
