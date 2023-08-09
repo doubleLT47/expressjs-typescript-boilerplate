@@ -1,14 +1,14 @@
 import { IForgotPasswordBody, ILoginBody, INewPasswordBody } from "@interfaces/requests/auth";
 import RLogin from "@validations/auth/login";
 import { NextFunction, Request, Response } from "express";
-import authService from "@services/auth";
+import AuthService from "@services/auth";
 import RForgotPassword from "@validations/auth/forgot-password";
 import RNewPassword from "@validations/auth/new-password";
 
 /**
  * @Controller("/auth")
  */
-class UserController {
+class AuthController {
   /**
    *
    * @method "post"
@@ -25,7 +25,7 @@ class UserController {
     next({
       code: 0,
       message: "success",
-      data: await authService.login(body),
+      data: await AuthService.login(body),
     });
   }
 
@@ -42,7 +42,7 @@ class UserController {
       body: req.body,
     });
     const body: IForgotPasswordBody = request.body();
-    await authService.forgotPassword(body.email);
+    await AuthService.forgotPassword(body.email);
     next({
       code: 0,
       message: "success",
@@ -62,7 +62,7 @@ class UserController {
       body: req.body,
     });
     const body: INewPasswordBody = request.body();
-    await authService.newPassWord(body);
+    await AuthService.newPassWord(body);
     next({
       code: 0,
       message: "success",
@@ -78,7 +78,7 @@ class UserController {
    * @param next
    */
   public async logout(req: Request, res: Response, next: NextFunction) {
-    await authService.logout(res.locals.user);
+    await AuthService.logout(res.locals.user);
     next({
       code: 0,
       message: "success",
@@ -86,4 +86,4 @@ class UserController {
   }
 }
 
-export default new UserController();
+export default new AuthController();

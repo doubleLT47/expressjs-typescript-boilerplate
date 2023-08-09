@@ -2,11 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import accountService from "@services/account";
 
 /**
- * @Controller("/accounts")
+ * @Controller("/me")
  */
 class UserController {
   /**
-   * @get("/profile")
+   *
+   * @method "get"
+   * @path "/profile"
+   * @param req
+   * @param res
+   * @param next
    */
   public async profile(req: Request, res: Response, next: NextFunction) {
     next({

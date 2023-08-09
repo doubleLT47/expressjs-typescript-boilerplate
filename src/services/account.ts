@@ -3,12 +3,12 @@ import { MRole } from "@models/role";
 import { MUser } from "@models/user";
 import _ from "lodash";
 
-class AccountService {
+export default class AccountService {
   /**
    *
    * @param id id of user
    */
-  async profile(id: number): Promise<Partial<IUser & { roleName: string }>> {
+  static async profile(id: number): Promise<Partial<IUser & { roleName: string }>> {
     const user: IUser | null = await MUser.findOne({
       attributes: {
         exclude: ["password", "roleId", "createdAt", "updatedAt"],
@@ -33,11 +33,9 @@ class AccountService {
       };
     }
     return {
-      ..._.pick(user, ["lastName", "middleName", "firstName", "phone", "email"]),
+      ..._.pick(user, ["lastName", "middleName", "firstName", "phone", "email", "id"]),
       profile: _.omit(user.profile, "accessToken", "refreshToken"),
       roleName: _.get(user, "role.name"),
     };
   }
 }
-
-export default new AccountService();
