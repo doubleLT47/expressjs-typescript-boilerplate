@@ -13,7 +13,7 @@ export default {
     password: String(process.env.MONGO_PASSWORD),
   },
   postgres: {
-    enable: Boolean(process.env.MONGO_ENABLE),
+    enable: Boolean(process.env.POSTGRES_ENABLE),
     host: String(process.env.POSTGRES_HOST),
     port: Number(process.env.POSTGRES_PORT),
     name: String(process.env.POSTGRES_DATABASE),
@@ -37,7 +37,6 @@ export default {
     enable: Boolean(process.env.S3_ENABLE),
     bucket: String(process.env.BUCKET),
     region: String(process.env.REGION),
-    endpoint: String(process.env.ENDPOINT),
     aws_access_key: String(process.env.AWS_ACCESS_KEY),
     aws_secret_key: String(process.env.AWS_SECRET_KEY),
   },

@@ -80,6 +80,7 @@ export default (sequelize: Sequelize): typeof MPost => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "post",
     }
   );

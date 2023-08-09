@@ -50,6 +50,7 @@ export default (sequelize: Sequelize): typeof MNavigation => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "navigation",
     }
   );

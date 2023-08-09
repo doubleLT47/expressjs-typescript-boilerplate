@@ -1,6 +1,6 @@
 import "dotenv/config";
 import "express-async-errors";
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -88,6 +88,12 @@ const startServer = async () => {
   }
 
   app.use("/api", APIRoute);
+  app.use("*", (req: Request, res: Response, next: NextFunction) => {
+    next({
+      code: -13,
+      message: `api not found`,
+    });
+  });
   app.use(responseHandle);
 
   const port = configs.app.port || 3000;

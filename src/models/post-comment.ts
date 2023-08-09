@@ -9,6 +9,7 @@ export class MPostComment extends Model<IPostComment> implements IPostComment {
   public userId: number;
   public parentId: number | null;
   public content: string;
+  public enable: boolean;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 }
@@ -37,10 +38,15 @@ export default (sequelize: Sequelize): typeof MPostComment => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "post_comment",
     }
   );

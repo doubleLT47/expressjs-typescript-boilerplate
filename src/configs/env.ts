@@ -20,7 +20,6 @@ export default (object: any) => {
     S3_ENABLE: Joi.boolean().required(),
     BUCKET: Joi.string().required(),
     REGION: Joi.string().required(),
-    ENDPOINT: Joi.string().required(),
     AWS_ACCESS_KEY: Joi.string().required(),
     AWS_SECRET_KEY: Joi.string().required(),
     SLACK_SIGNING_SECRET: Joi.string().required(),

@@ -12,13 +12,21 @@ export default async (result: any, req: Request, res: Response, next: NextFuncti
     status = 403;
   }
 
-  if (result.code !== 0 ?? !result.code) {
+  if (result.code === -12) {
+    status = 400;
+  }
+
+  if (result.code === -13) {
+    status = 404;
+  }
+
+  if (result.code !== 0 && !result.code) {
     status = 500;
     console.error(result);
   }
 
   const response: IResponse = {
-    code: status === 200 ? result.code : null,
+    code: result.code ?? null,
     message: status === 500 ? "Something went wrong" : result.message,
     data: result.data || null,
   };

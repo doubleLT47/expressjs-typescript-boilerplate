@@ -23,6 +23,7 @@ export default (sequelize: Sequelize): typeof MPostTag => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       timestamps: false,
       tableName: "post_tag",
     }

@@ -17,7 +17,7 @@ import configs from "@configs/index";
 import path from "path";
 import mimeType from "mime-types";
 import randomstring from "randomstring";
-const { region, endpoint, aws_access_key, aws_secret_key } = configs.s3;
+const { region, aws_access_key, aws_secret_key } = configs.s3;
 const BUCKET: string = configs.s3.bucket as string;
 
 class Storage {

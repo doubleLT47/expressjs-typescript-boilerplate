@@ -4,7 +4,7 @@ import { IRole } from "@interfaces/models/role";
 export class MRole extends Model<IRole> implements IRole {
   public id: number;
   public name: string;
-  public permissions: any;
+  public permission: any;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 }
@@ -20,8 +20,9 @@ export default (sequelize: Sequelize): typeof MRole => {
       name: {
         type: DataTypes.STRING(255),
         allowNull: false,
+        unique: true,
       },
-      permissions: {
+      permission: {
         type: DataTypes.JSONB,
         defaultValue: {},
       },
@@ -29,6 +30,7 @@ export default (sequelize: Sequelize): typeof MRole => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "role",
     }
   );

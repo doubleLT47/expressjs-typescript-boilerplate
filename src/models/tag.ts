@@ -47,6 +47,7 @@ export default (sequelize: Sequelize): typeof MTag => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "tag",
     }
   );

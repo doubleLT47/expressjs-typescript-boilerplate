@@ -51,6 +51,7 @@ export default (sequelize: Sequelize): typeof MCategory => {
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "category",
     }
   );

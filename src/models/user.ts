@@ -4,20 +4,22 @@ import { MRole } from "./role";
 import { MPost } from "./post";
 
 export class MUser extends Model<IUser> implements IUser {
-  public id: number;
+  public id?: number;
   public lastName: string;
   public firstName: string;
-  public middleName: string;
+  public middleName?: string;
   public phone: string;
   public password: string;
   public email: string;
   public enable: boolean;
-  public roleId: number | null;
+  public roleId: number;
   public profile: {
     avatar: string | null;
     dob: Date | null;
     address: string | null;
-    email: { code: string | null; active: false; activeAt: Date | null };
+    password: { code: string | null; active: boolean; activeAt: Date | null };
+    accessToken: string | null;
+    refreshToken: string | null;
   };
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
@@ -41,7 +43,7 @@ export default (sequelize: Sequelize): typeof MUser => {
       },
       middleName: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
       },
       phone: {
         type: DataTypes.STRING(11),
@@ -61,16 +63,28 @@ export default (sequelize: Sequelize): typeof MUser => {
       },
       roleId: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
       },
       profile: {
         type: DataTypes.JSONB,
-        defaultValue: {},
+        defaultValue: {
+          avatar: null,
+          dob: null,
+          address: null,
+          password: {
+            code: null,
+            active: false,
+            activeAt: null,
+          },
+          accessToken: null,
+          refreshToken: null,
+        },
       },
     },
     {
       sequelize,
       paranoid: true,
+      schema: "core",
       tableName: "user",
     }
   );

@@ -7,6 +7,7 @@ export interface IPostComment {
   userId: number;
   parentId: number | null;
   content: string;
+  enable: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   post?: IPost;

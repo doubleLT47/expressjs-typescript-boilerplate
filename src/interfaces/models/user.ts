@@ -5,22 +5,26 @@ export interface IUser {
   id?: number;
   lastName: string;
   firstName: string;
-  middleName: string;
+  middleName?: string;
   phone: string;
   email: string;
   password: string;
-  roleId: number | null;
+  roleId: number;
   enable: boolean;
-  profile: {
-    avatar: string | null;
-    dob: Date | null;
-    address: string | null;
-    email: {
-      code: string | null;
-      active: false;
-      activeAt: Date | null;
-    };
-  };
+  profile:
+    | {
+        avatar: string | null;
+        dob: Date | null;
+        address: string | null;
+        password: {
+          code: string | null;
+          active: boolean;
+          activeAt: Date | null;
+        };
+        accessToken: string | null;
+        refreshToken: string | null;
+      }
+    | any;
   createdAt?: Date;
   updatedAt?: Date;
   role?: IRole;
