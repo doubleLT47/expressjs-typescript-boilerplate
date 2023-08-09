@@ -14,8 +14,9 @@ class MailService {
 
   constructor() {
     this.transporter = createTransport({
+      service: "gmail",
       host: host,
-      port: port,
+      // port: port,
       secure: false,
       auth: {
         user: user,

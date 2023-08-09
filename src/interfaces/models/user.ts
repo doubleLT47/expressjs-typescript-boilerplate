@@ -18,8 +18,7 @@ export interface IUser {
         address: string | null;
         password: {
           code: string | null;
-          active: boolean;
-          activeAt: Date | null;
+          createdAt: Date | null;
         };
         accessToken: string | null;
         refreshToken: string | null;

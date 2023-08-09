@@ -87,6 +87,10 @@ const startServer = async () => {
     require("@cron");
   }
 
+  if (configs.email.enable) {
+    require("@configs/email");
+  }
+
   app.use("/api", APIRoute);
   app.use("*", (req: Request, res: Response, next: NextFunction) => {
     next({

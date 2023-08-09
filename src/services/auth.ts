@@ -6,7 +6,11 @@ import { Op } from "sequelize";
 import _ from "lodash";
 import { MRole } from "@models/role";
 import { generateRefreshToken, generateToken, verifyToken } from "@utils/jwt";
-import { comparePassword } from "@utils/bcryptjs";
+import { comparePassword, hashPassword } from "@utils/bcryptjs";
+import randomString from "randomstring";
+import MailService from "@configs/email";
+import liquid from "@configs/liquiq";
+import moment from "moment";
 
 export interface ITokenPayload {
   userId: number;
@@ -177,13 +181,106 @@ export default class AuthService {
    *
    * @param email
    */
-  static async forgotPassword(email: string): Promise<void> {}
+  static async forgotPassword(email: string): Promise<void> {
+    const user: IUser | null = await MUser.findOne({
+      attributes: ["id", "profile", "lastName", "middleName", "firstName"],
+      where: {
+        email: email,
+        enable: true,
+      },
+      raw: true,
+      nest: true,
+    });
+
+    if (!user) {
+      throw {
+        code: 1,
+        message: "user not found",
+      };
+    }
+
+    const otp: string = randomString.generate({
+      charset: "numeric",
+      length: 6,
+    });
+
+    MailService.send(
+      email,
+      "Quên mật khẩu Thegioiwhey",
+      "OTP quên mật khẩu TGW",
+      await liquid.renderFile("email/forgot-password/html.liquid", {
+        userName: `${user.lastName} ${user.middleName + " "}${user.firstName}`,
+        oneTimePassword: otp,
+      })
+    ).catch((e) => {
+      console.log("🚀 ~ file: auth.ts:215 ~ AuthService ~ forgotPassword ~ e:", e);
+    });
+    await MUser.update(
+      {
+        profile: {
+          ...user.profile,
+          password: {
+            code: otp,
+            createdAt: new Date(),
+          },
+        },
+      },
+      {
+        where: {
+          id: user.id,
+        },
+      }
+    );
+  }
 
   /**
    *
-   * @param params { code, email, password}
+   * @param payload { code, email, password}
    */
-  static async newPassWord(params: INewPasswordBody): Promise<void> {}
+  static async newPassWord(payload: INewPasswordBody): Promise<void> {
+    const user: IUser | null = await MUser.findOne({
+      attributes: ["profile", "id"],
+      where: {
+        email: payload.email,
+      },
+      raw: true,
+      nest: true,
+    });
+
+    if (!user) {
+      throw {
+        code: -12,
+        message: "user not found",
+      };
+    }
+
+    if (
+      user.profile.password.code !== payload.code ||
+      moment().subtract(5, "minute").valueOf() > moment(user.profile.password.createdAt).valueOf()
+    ) {
+      throw {
+        code: 1,
+        message: "wrong otp",
+      };
+    }
+    await MUser.update(
+      {
+        password: hashPassword(payload.password),
+        profile: {
+          ...user.profile,
+          password: {
+            code: null,
+            createdAt: null,
+          },
+        },
+      },
+      {
+        where: {
+          id: user.id,
+        },
+      }
+    );
+  }
 
   /**
    *

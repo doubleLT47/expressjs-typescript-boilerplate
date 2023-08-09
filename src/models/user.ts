@@ -17,7 +17,7 @@ export class MUser extends Model<IUser> implements IUser {
     avatar: string | null;
     dob: Date | null;
     address: string | null;
-    password: { code: string | null; active: boolean; activeAt: Date | null };
+    password: { code: string | null; createdAt: Date | null };
     accessToken: string | null;
     refreshToken: string | null;
   };

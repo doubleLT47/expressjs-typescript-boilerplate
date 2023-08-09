@@ -20,7 +20,7 @@ export default async (result: any, req: Request, res: Response, next: NextFuncti
     status = 404;
   }
 
-  if (result.code !== 0 && !result.code) {
+  if (typeof result.code !== "number" && result.code !== 0 && !result.code) {
     status = 500;
     console.error(result);
   }
