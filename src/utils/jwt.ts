@@ -33,7 +33,10 @@ export async function verifyToken(token: string): Promise<ITokenPayload> {
   return new Promise((resolve, reject) => {
     jwt.verify(token, configs.app.secret, (error, data) => {
       if (error) {
-        return reject(error);
+        return reject({
+          code: -10,
+          message: error.message,
+        });
       }
       return resolve(data as ITokenPayload);
     });

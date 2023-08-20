@@ -1,19 +1,19 @@
 import configs from "@configs/index";
-import Slack from "@slack/bolt";
+import { App } from "@slack/bolt";
 const { secret, token, channel } = configs.notification.slack;
 
 class SlackLogging {
   static instance: SlackLogging;
-  private app: Slack.App;
+  private app: App;
 
   constructor() {
-    this.app = new Slack.App({
+    this.app = new App({
       signingSecret: secret,
       token: token,
     });
   }
 
-  public async send(message: string, blocks: any) {
+  public async send(message: string, blocks?: any) {
     return await this.app.client.chat.postMessage({
       token: token,
       channel: channel,
