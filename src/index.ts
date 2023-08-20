@@ -6,7 +6,6 @@ import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
 
-import "@configs/env";
 import APIRoute from "@routes/index";
 import { initializeDatabase } from "@dbs/postgres";
 import responseHandle from "@middleware/response-handle";

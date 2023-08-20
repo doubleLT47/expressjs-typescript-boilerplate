@@ -1,6 +1,6 @@
 import { IResponse } from "@interfaces/response";
 import { NextFunction, Request, Response } from "express";
-import SlackLogging from "@configs/log";
+// import SlackLogging from "@configs/log";
 
 export default async (result: any, req: Request, res: Response, next: NextFunction) => {
   let status: number = 200;
@@ -23,10 +23,10 @@ export default async (result: any, req: Request, res: Response, next: NextFuncti
 
   if (typeof result.code !== "number" && result.code !== 0 && !result.code) {
     status = 500;
-    SlackLogging.send(
-      "Error from core api: " +
-        (result.message || result.toString() || "Internal error from core api")
-    ).catch((e) => console.error(e));
+    // SlackLogging.send(
+    //   "Error from core api: " +
+    //     (result.message || result.toString() || "Internal error from core api")
+    // ).catch((e) => console.error(e));
     console.error(result);
   }
 
