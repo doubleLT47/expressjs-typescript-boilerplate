@@ -1,7 +1,8 @@
+import { ObjectId, Document } from "mongoose";
+
 type ApiPermissionType = "0000" | "1111" | "2222";
 
-export interface IApiKey {
-  _id?: string;
+export interface IApiKey extends Document {
   key: string;
   status: boolean;
   permission: ApiPermissionType[];

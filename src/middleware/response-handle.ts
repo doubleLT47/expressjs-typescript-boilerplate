@@ -1,4 +1,5 @@
 import { IResponse } from "@interfaces/response";
+import logger from "@utils/logger";
 import { NextFunction, Request, Response } from "express";
 // import SlackLogging from "@configs/log";
 
@@ -27,7 +28,7 @@ export default async (result: any, req: Request, res: Response, next: NextFuncti
     //   "Error from core api: " +
     //     (result.message || result.toString() || "Internal error from core api")
     // ).catch((e) => console.error(e));
-    console.error(result);
+    logger.error(result);
   }
 
   const response: IResponse = {

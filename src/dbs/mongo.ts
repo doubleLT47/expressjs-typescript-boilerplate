@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import configs from "@configs/index";
+import logger from "@utils/logger";
 
 const {
   app: { env },
@@ -38,20 +39,19 @@ class Database {
         } catch (e) {
           console.log(e);
         }
-        (_: any) => console.log(`Connected mongodb success `);
+        (_: any) => logger.info(`Connected mongodb success `);
       })
       .catch((err) => console.log(`Error connect!`));
 
     mongoose.connection.on("connected", () => {
-      console.log("Mongodb connected to db success");
-
+      logger.info("Mongodb connected to db success");
       // insert sql ...
     });
     mongoose.connection.on("error", (err) => {
-      console.error("Mongodb connected to db error" + err);
+      logger.error("Mongodb connected to db error" + err);
     });
     mongoose.connection.on("disconnected", () => {
-      console.log("Mongodb disconnected db success");
+      logger.info("Mongodb disconnected db success");
     });
   }
 

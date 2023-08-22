@@ -1,15 +1,16 @@
+import { Document, ObjectId } from "mongoose";
+
 export interface IReservation {
-  cardId: string;
+  cardId: ObjectId;
   stock: number;
   createdOn: Date;
 }
 
-export interface IInventory {
-  _id: string;
-  productId: string;
+export interface IInventory extends Document {
+  productId: ObjectId;
   location: string;
   stock: number;
-  shopId: string;
+  shopId: ObjectId;
   reservations: IReservation[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;

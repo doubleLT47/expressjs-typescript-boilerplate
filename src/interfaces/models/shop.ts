@@ -1,5 +1,7 @@
+import { ObjectId } from "mongoose";
+
 export interface IShop {
-  _id: string;
+  _id: ObjectId;
   name: string;
   email: string;
   password: string;

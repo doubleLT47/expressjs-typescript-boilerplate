@@ -1,8 +1,5 @@
-export interface IRequest {
-  query?: any | any[];
-  header?: any | any[];
-  body?: any | any[];
-  params?: any | any[];
-  files?: any;
-  file?: any;
+export interface IRequest<Q = any, B = any, P = any> {
+  query?: Q | Q[];
+  body?: B | B[];
+  params?: P | P[];
 }

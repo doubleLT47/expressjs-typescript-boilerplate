@@ -1,4 +1,4 @@
-import authService from "@services/auth";
+// import authService from "@services/auth";
 import { Request, Response, NextFunction } from "express";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -9,6 +9,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       message: "missing token",
     });
   }
-  res.locals.user = await authService.getUserByToken(token);
+  // res.locals.user = await authService.getUserByToken(token);
   next();
 };

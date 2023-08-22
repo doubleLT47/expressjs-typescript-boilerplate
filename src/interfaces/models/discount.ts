@@ -1,5 +1,6 @@
-export interface IDiscount {
-  _id?: string;
+import { ObjectId, Document } from "mongoose";
+
+export interface IDiscount extends Document {
   name: string;
   description: string;
   type: "fixed_amount" | "percentage";
@@ -12,10 +13,10 @@ export interface IDiscount {
   usersUsed: string[];
   maxUsesPerUser: number;
   minOrderValue: number;
-  shopId: string;
+  shopId: ObjectId;
   isActive: boolean;
   appliesTo: "all" | "specific";
-  productIds: string[];
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  productIds: ObjectId[];
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 }

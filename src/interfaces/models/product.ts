@@ -1,7 +1,7 @@
 import { IShop } from "@interfaces/models/shop";
+import { Document, ObjectId } from "mongoose";
 
-export interface IProduct {
-  _id?: string;
+export interface IProduct extends Document {
   name: string;
   thumb: string;
   description: string;
@@ -9,7 +9,7 @@ export interface IProduct {
   price: number;
   quality: number;
   type: "Electronics" | "Clothing" | "Furniture";
-  shop: IShop;
+  shop: IShop["_id"];
   attributes: any;
   ratingsAverage: number;
   variations: any[];
@@ -19,30 +19,29 @@ export interface IProduct {
   readonly updatedAt?: Date;
 }
 
-export interface IElectronicProduct {
-  _id?: string;
+export interface IElectronicProduct extends Document {
   manufacturer: string;
   model: string;
   color: string;
-  shop: IShop;
+  shop: IShop["_id"];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
 
-export interface IClothingProduct {
+export interface IClothingProduct extends Document {
   brand: string;
   size: string;
   material: string;
-  shop: IShop;
+  shop: IShop["_id"];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
 
-export interface IFurnitureProduct {
+export interface IFurnitureProduct extends Document {
   brand: string;
   size: string;
   material: string;
-  shop: IShop;
+  shop: IShop["_id"];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

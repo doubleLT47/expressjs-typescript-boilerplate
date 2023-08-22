@@ -11,6 +11,7 @@ import { initializeDatabase } from "@dbs/postgres";
 import responseHandle from "@middleware/response-handle";
 import configs from "@configs/index";
 import { checkOverload } from "@helpers/check-connect";
+import logger from "@utils/logger";
 
 const startServer = async () => {
   const app: Express = express();
@@ -101,7 +102,7 @@ const startServer = async () => {
 
   const port = configs.app.port || 3000;
   app.listen(port);
-  console.log("Server is running at http://localhost:" + port);
+  logger.info("Server is running at http://localhost:" + port);
 };
 
 startServer();

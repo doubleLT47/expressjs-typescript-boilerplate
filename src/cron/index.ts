@@ -1,4 +1,5 @@
 import schedule from "node-schedule";
+import logger from "@utils/logger";
 
 interface IJob {
   id: string;
@@ -21,8 +22,6 @@ class Schedule {
   }
 
   public removeJob(id: string) {
-    if (!id) console.error("id not implement");
-
     const job: IJob | undefined = this.jobs.find((job) => job.id === id);
     if (job?.job.cancel) job.job.cancel();
 

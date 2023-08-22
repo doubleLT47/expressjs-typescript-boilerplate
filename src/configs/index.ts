@@ -3,6 +3,10 @@ export default {
     port: Number(process.env.PORT),
     env: String(process.env.NODE_ENV),
     secret: String(process.env.SECRET),
+    accessTokenPrivateKey: String(process.env.ACCESS_TOKEN_PRIVATE_KEY),
+    refreshTokenPrivateKey: String(process.env.REFRESH_PRIVATE_KEY),
+    accessTokenPublicKey: String(process.env.ACCESS_TOKEN_PUBLIC_KEY),
+    refreshTokenPublicKey: String(process.env.REFRESH_PUBLIC_KEY),
   },
   mongo: {
     enable: Boolean(process.env.MONGO_ENABLE),

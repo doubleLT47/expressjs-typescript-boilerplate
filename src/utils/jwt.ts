@@ -1,44 +1,57 @@
-import { ITokenPayload } from "@services/auth";
 import jwt from "jsonwebtoken";
 import configs from "@configs/index";
 
-/**
- *
- * @param payload { userId, roleId, createdAt}
- * @returns return a jwt token
- */
-export function generateToken(payload: ITokenPayload): string {
-  return jwt.sign(payload, configs.app.secret, {
-    expiresIn: 86400,
+export function generateToken(
+  payload: Object,
+  keyName: "accessTokenPrivateKey" | "refreshTokenPrivateKey",
+  options?: jwt.SignOptions | undefined
+): string {
+  const signingKey: string = parseKey(keyName);
+
+  return jwt.sign(payload, signingKey, {
+    ...(options && options),
+    algorithm: "RS256",
   });
 }
 
-/**
- *
- * @param payload { userId, roleId, createdAt}
- * @returns return a jwt token
- */
-export function generateRefreshToken(payload: ITokenPayload): string {
-  return jwt.sign(payload, configs.app.secret, {
-    expiresIn: 2592000,
-  });
+export function verifyToken(
+  token: string,
+  keyName: "accessTokenPublicKey" | "refreshTokenPublicKey"
+):
+  | {
+      valid: boolean;
+      expired: boolean;
+      decoded: string | jwt.JwtPayload;
+    }
+  | {
+      valid: boolean;
+      expired: boolean;
+      decoded: null;
+    } {
+  const publicKey: string = parseKey(keyName);
+
+  try {
+    const decoded = jwt.verify(token, publicKey);
+    return {
+      valid: true,
+      expired: false,
+      decoded,
+    };
+  } catch (error: any) {
+    return {
+      valid: true,
+      expired: error.message === "jwt expired",
+      decoded: null,
+    };
+  }
 }
 
-/**
- *
- * @param token
- * @returns {userId, roleId, createdAt}
- */
-export async function verifyToken(token: string): Promise<ITokenPayload> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, configs.app.secret, (error, data) => {
-      if (error) {
-        return reject({
-          code: -10,
-          message: error.message,
-        });
-      }
-      return resolve(data as ITokenPayload);
-    });
-  });
-}
+const parseKey = (
+  keyName:
+    | "accessTokenPrivateKey"
+    | "refreshTokenPrivateKey"
+    | "accessTokenPublicKey"
+    | "refreshTokenPublicKey"
+): string => {
+  return Buffer.from(configs.app[keyName], "base64").toString("ascii");
+};
